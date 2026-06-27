@@ -1,0 +1,68 @@
+{
+    "paths": {
+        "raw_pdf": "data/raw_pdf",
+        "processed_text": "data/processed_text",
+        "cleaned_text": "data/cleaned_text",
+        "legal_chunks_path": "data/legal_chunks.parquet",
+        "bm25_dir": "bm25_output",
+        "bm25_lookup_path": "bm25_output/bm25_lookup.parquet",
+        "faiss_index_path": "faiss_output/legal_chunks.faiss",
+        "embedding_metadata_path": "embedding_output/embedding_metadata.parquet",
+        "graph_dir": "graph"
+    },
+
+    "weight": {},
+    "data_size": 300,
+    "model_attribute": {
+        "batch_size": 512,
+        "overlap": 100
+    },
+    "embedding_model": {
+        "name": "Qwen/Qwen3-Embedding-0.6B",
+        "cache": "models/embedding_model"
+    },
+    "llm_model": {
+        "name": "Qwen/Qwen3-0.6B",
+        "cache": "models/llm_models/Qwen3"
+    },
+    
+    "vector_store": {
+        "faiss_index_path": "vector_store/faiss.index",
+        "metadata_path": "vector_store/metadata.pkl"
+    },
+
+    "bm25_index_path": "bm25_index/bm25_index",
+    "bm25_metadata_path": "bm25_index/documents.pkl",
+
+    "retrieval": {
+        "bm25_top_k": [300, 500, 800],
+        "faiss_top_k": [300, 500, 800],
+        "rrf_k": [30, 60, 90],
+        "seed_top_k": [200, 300, 500],
+        "final_top_k": 200
+    },
+    "graph": {
+        "candidate_pool_size": 800,
+        "final_top_k": 200,
+        "max_hops": [1],
+        "max_neighbors_per_node": [5, 10, 20],
+        "graph_weight": [0.0, 0.05, 0.1, 0.2],
+        "hop_decay": [0.3, 0.5, 0.65],
+        "direction": "both",
+        "edge_type_key": "edge_type",
+        "edge_weight_key": "reference_count"
+    },
+    "evaluation": {
+        "train_path": "ground_truth/train_queries.parquet",
+        "test_path": "ground_truth/test_queries.parquet",
+        "output_dir": "evaluation_output",
+        "tuning_k": 200,
+        "primary_metric": "recall@200",
+        "max_tuning_trials": 30,
+        "random_seed": 42,
+        "device": "cpu",
+        "log_every": 10,
+        "debug_queries": 3
+    }
+        
+}
