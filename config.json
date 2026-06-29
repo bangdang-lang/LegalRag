@@ -4,6 +4,13 @@
     "seed": 42,
     "log_level": "INFO"
   },
+
+  "chunking": {
+    "target_legal_sector": "Giáo dục",
+    "min_chunk_chars": 50,
+    "print_all_chunks": false
+  },
+
   "paths": {
     "legal_chunks": "data/legal_chunks.parquet",
     "embedding_dir": "embedding_output",
@@ -24,11 +31,17 @@
     "local_model_dir": "models/embedding_model",
     "text_column": "content",
     "id_column": "id",
+    "text_mode": "content",
     "batch_size": 32,
-    "max_length": 1024,
+    "read_batch_size": 128,
+    "max_length": 512,
+    "embedding_dim": 1024,
+    "query_prompt_name": "query",
     "normalize": true,
     "device": "auto",
-    "dtype": "float16"
+    "dtype": "float16",
+    "local_files_only": false,
+    "overwrite": false
   },
 
   "bm25": {
@@ -79,63 +92,28 @@
     "shuffle": true,
     "query_count": 4000,
     "candidate_k": 250,
-    "ks": [
-      5,
-      10,
-      50,
-      100,
-      200
-    ],
+    "ks": [5,10,50,100,200],
     "log_every": 25,
     "hyperparameter_grid": {
       "hybrid": {
-        "semantic_weight": [
-          0.5,
-          1.0,
-          1.5
-        ],
-        "lexical_weight": [
-          0.5,
-          1.0,
-          1.5
-        ],
-        "rrf_k": [
-          30,
-          60,
-          90
-        ]
+        "semantic_weight": [0.5, 1.0, 1.5],
+        "lexical_weight": [0.5, 1.0, 1.5],
+        "rrf_k": [30, 60, 90]
       },
       "graph": {
-        "max_hops": [
-          1,
-          2
-        ],
-        "hop_decay": [
-          0.5,
-          0.65,
-          0.8
-        ]
+        "max_hops": [1, 2],
+        "hop_decay": [0.5, 0.65, 0.8]
       },
       "hybrid_graph": {
-        "graph_weight": [
-          0.1,
-          0.2,
-          0.3
-        ],
-        "max_hops": [
-          1,
-          2
-        ],
-        "hop_decay": [
-          0.5,
-          0.65,
-          0.8
-        ]
+        "graph_weight": [0.1, 0.2, 0.3],
+        "max_hops": [1, 2],
+        "hop_decay": [0.5, 0.65, 0.8]
       }
     }
   },
   "pipeline": {
     "mode": "experiment",
+    "source_mode": "existing",
     "rebuild_before_evaluation": false,
     "query": "Quy định pháp luật liên quan là gì?",
     "build_steps": [
@@ -145,5 +123,12 @@
       "bm25",
       "graph"
     ]
+  },
+
+  "dataset": {
+    "name": "minhdoan17/vietnamese-legal-documents",
+    "content_config": "content",
+    "metadata_config": "metadata",
+    "cache_dir": "hf_cache/datasets/minhdoan17__vietnamese-legal-documents"
   }
 }
