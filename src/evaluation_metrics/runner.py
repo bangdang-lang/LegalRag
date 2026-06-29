@@ -25,7 +25,7 @@ class EvaluationRunner:
         self.pipeline = pipeline or GraphSearchPipeline(config)
         self.logger = logging.getLogger(self.__class__.__name__)
         self.ks = [int(k) for k in self.config.get("evaluation.ks", [5, 10, 50, 100, 200])]
-        self.query_count = int(self.config.get("evaluation.query_count", 300))
+        self.query_count = int(self.config.get("evaluation.query_count", 4000))
         self.max_k = max(self.ks)
         self.candidate_k = max(
             self.max_k,
